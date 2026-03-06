@@ -4,10 +4,10 @@
 
 // 단일 행 고정 샘플 데이터
 const sampleRow = {
-  replacementCumulative: 120.0,
-  incomingAmount: 18.0,
-  currentCumulative: 131.5,
-  hourlyUsage: 950.0,
+  replacementCumulative: 0,
+  incomingAmount: 0,
+  currentCumulative: 0,
+  hourlyUsage: 0,
 };
 
 const inputBody = document.getElementById("inputBody");
@@ -26,6 +26,13 @@ function parseNumber(value) {
   if (raw === "") return NaN;
   const n = Number(raw);
   return Number.isFinite(n) ? n : NaN;
+}
+
+// 소수점 자릿수 확인
+function getDecimalPlaces(value) {
+  const raw = String(value ?? "").replace(/,/g, "").trim();
+  if (!raw.includes(".")) return 0;
+  return raw.split(".")[1].length;
 }
 
 // 고정 소수점 콤마 포맷
@@ -81,16 +88,40 @@ function appendInputRow(data) {
     <td data-label="교체시점 누적사용량 (ton)"><input class="input-cell number-input" type="text" data-field="replacementCumulative" value="${formatFixedNumber(data.replacementCumulative, 2)}" placeholder="ton" /></td>
     <td data-label="입고량 (ton)"><input class="input-cell number-input" type="text" data-field="incomingAmount" value="${formatFixedNumber(data.incomingAmount, 2)}" placeholder="ton" /></td>
     <td data-label="현재 누적사용량 (ton)"><input class="input-cell number-input" type="text" data-field="currentCumulative" value="${formatFixedNumber(data.currentCumulative, 2)}" placeholder="ton" /></td>
-    <td data-label="현재 시간당 사용량 (kg/h)"><input class="input-cell number-input" type="text" data-field="hourlyUsage" value="${formatFixedNumber(data.hourlyUsage, 2)}" placeholder="kg/h" /></td>
+    <td data-label="현재 시간당 사용량 (kg/h)"><input class="input-cell number-input kg-input" type="text" data-field="hourlyUsage" value="${formatFixedNumber(data.hourlyUsage, 1)}" placeholder="kg/h" /></td>
   `;
   inputBody.appendChild(tr);
 
+  // kg/h 입력은 소수 1자리까지만 허용
+  tr.querySelectorAll(".kg-input").forEach((input) => {
+    input.dataset.prevValue = input.value;
+    input.addEventListener("input", () => {
+      const normalized = input.value.replace(/,/g, "").trim();
+      const validPattern = /^\d*(\.\d{0,1})?$/;
+
+      if (normalized === "" || validPattern.test(normalized)) {
+        input.dataset.prevValue = input.value;
+      } else {
+        input.value = input.dataset.prevValue ?? "";
+      }
+    });
+  });
+
   // 숫자 입력 blur 시 2자리 소수 포맷
   tr.querySelectorAll(".number-input").forEach((input) => {
+    // 클릭/탭으로 포커스 시 기존 값 전체 선택 -> 바로 덮어쓰기 가능
+    input.addEventListener("focus", () => {
+      input.select();
+    });
+
     input.addEventListener("blur", () => {
       const parsed = parseNumber(input.value);
       if (!Number.isNaN(parsed)) {
-        input.value = formatFixedNumber(parsed, 2);
+        if (input.classList.contains("kg-input")) {
+          input.value = formatFixedNumber(parsed, 1);
+        } else {
+          input.value = formatFixedNumber(parsed, 2);
+        }
       }
     });
   });
@@ -103,6 +134,10 @@ function collectInputRow() {
 
   return {
     name: "원부재료",
+    replacementCumulativeRaw: getValue("replacementCumulative"),
+    incomingAmountRaw: getValue("incomingAmount"),
+    currentCumulativeRaw: getValue("currentCumulative"),
+    hourlyUsageRaw: getValue("hourlyUsage"),
     replacementCumulative: parseNumber(getValue("replacementCumulative")),
     incomingAmount: parseNumber(getValue("incomingAmount")),
     currentCumulative: parseNumber(getValue("currentCumulative")),
@@ -125,6 +160,10 @@ function validateAndCalculate(row) {
 
   if (!Number.isNaN(row.hourlyUsage) && row.hourlyUsage <= 0) {
     errors.push("현재 시간당 사용량(kg/h)은 0보다 커야 합니다.");
+  }
+
+  if (getDecimalPlaces(row.hourlyUsageRaw) > 1) {
+    errors.push("현재 시간당 사용량(kg/h)은 소수점 1자리까지만 입력 가능합니다.");
   }
 
   // 남은 재고량 계산: ton
@@ -226,7 +265,7 @@ function initialize() {
     renderSummaryNow(new Date());
   }, 60 * 1000);
 
-  handleCalculate();
+  renderSummaryNow(new Date());
 }
 
 initialize();
