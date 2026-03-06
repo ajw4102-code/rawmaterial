@@ -1,0 +1,267 @@
+:root {
+  --bg-main: #d9ddda;
+  --bg-card: #f7f9f7;
+  --bg-input: #ffffff;
+  --border: #b8c2bb;
+  --text-main: #17221b;
+  --text-sub: #243429;
+  --text-dim: #5f6f63;
+
+  --accent: #1f9e45;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --safe: #22c55e;
+
+  --shadow: 0 6px 14px rgba(33, 40, 35, 0.12);
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background: linear-gradient(180deg, #e7ebe7 0%, var(--bg-main) 46%, #cfd6d0 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.container {
+  width: min(1200px, 95%);
+  margin: 20px auto 32px;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(247, 249, 247, 0.96), rgba(237, 242, 238, 0.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.summary-item {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #bec8c0;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  color: #35543f;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-bottom: 5px;
+}
+
+.summary-value {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.section-title {
+  margin: 6px 0 10px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #1f3829;
+  letter-spacing: 0.2px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+thead th {
+  background: rgba(68, 137, 84, 0.12);
+  color: var(--text-main);
+  font-size: 0.94rem;
+  font-weight: 800;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+tbody td {
+  border-bottom: 1px solid rgba(140, 155, 144, 0.8);
+  padding: 8px;
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 0.9rem;
+}
+
+tbody tr:hover {
+  background: rgba(64, 167, 90, 0.08);
+}
+
+.input-cell {
+  width: 100%;
+  background: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid #a9b4ac;
+  border-radius: 8px;
+  padding: 7px 9px;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.input-cell:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(31, 158, 69, 0.22);
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+button {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s ease, filter 0.15s ease;
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  margin-left: auto;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.error-box {
+  display: none;
+  margin-bottom: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #991b1b;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.error-box ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+.muted {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.footer-note {
+  margin-top: 10px;
+  color: #3b5a46;
+  font-size: 0.85rem;
+}
+
+/* 모바일 대응: 가로 스크롤 테이블을 카드형 스택으로 전환 */
+@media (max-width: 768px) {
+  .container {
+    width: 96%;
+    margin: 14px auto 24px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .summary-value {
+    font-size: 1.02rem;
+  }
+
+  button {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  #inputTable,
+  #resultTable {
+    min-width: 0;
+  }
+
+  #inputTable thead,
+  #resultTable thead {
+    display: none;
+  }
+
+  #inputTable tbody tr,
+  #resultTable tbody tr {
+    display: block;
+    margin: 10px 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    overflow: hidden;
+  }
+
+  #inputTable tbody td,
+  #resultTable tbody td {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 10px;
+    align-items: center;
+    text-align: left;
+    padding: 8px 10px;
+  }
+
+  #inputTable tbody td::before,
+  #resultTable tbody td::before {
+    content: attr(data-label);
+    font-size: 0.84rem;
+    color: #264733;
+    font-weight: 800;
+  }
+
+  #inputTable tbody td[colspan],
+  #resultTable tbody td[colspan] {
+    display: block;
+    text-align: center;
+  }
+
+  #inputTable tbody td[colspan]::before,
+  #resultTable tbody td[colspan]::before {
+    content: none;
+  }
+}

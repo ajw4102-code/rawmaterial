@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>원부재료 교체예상 계산기</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>원부재료 교체예상 계산기</h1>
+
+    <section class="card" aria-label="요약 정보">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-label">현재 시간</div>
+          <div id="summaryNow" class="summary-value">-</div>
+        </div>
+      </div>
+
+      <div class="section-title">입력 테이블</div>
+      <div class="table-wrap">
+        <table id="inputTable" aria-label="원부재료 입력 테이블">
+          <thead>
+            <tr>
+              <th style="width: 22%;">원부재료명</th>
+              <th>교체시점 누적사용량 (ton)</th>
+              <th>입고량 (ton)</th>
+              <th>현재 누적사용량 (ton)</th>
+              <th>현재 시간당 사용량 (kg/h)</th>
+            </tr>
+          </thead>
+          <tbody id="inputBody"></tbody>
+        </table>
+      </div>
+
+      <div class="btn-row">
+        <button id="calculateBtn" type="button">계산</button>
+      </div>
+
+      <div id="errorBox" class="error-box" role="alert"></div>
+
+      <div class="section-title">결과 영역</div>
+      <div class="table-wrap">
+        <table id="resultTable" aria-label="계산 결과 테이블">
+          <thead>
+            <tr>
+              <th>원부재료명</th>
+              <th>남은 재고량 (ton)</th>
+              <th>남은 시간 (h / 시간·분)</th>
+              <th>현재 시간</th>
+              <th>교체 예상 시간</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody">
+            <tr>
+              <td colspan="5" class="muted">입력 후 "계산" 버튼을 눌러주세요.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer-note">※ 단위 기준: 누적사용량/입고량/남은재고량은 ton, 시간당 사용량은 kg/h 입니다. 이 계산은 현재 시간당 사용량 기준 예측값입니다.</div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
